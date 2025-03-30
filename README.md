@@ -70,66 +70,56 @@ src/main/java/br/com/dio/
 ## 🔄 Diagrama Mermaid (Arquitetura e Fluxo)
 
 ```mermaid
-graph TD
-  A[Usuário] -->|interage com| UI[Interface de Usuário]
-  UI -->|chama| MainMenu[MainMenu]
-  UI -->|navega para| BoardMenu[BoardMenu]
+flowchart TB
 
-  MainMenu --> Main[Main.java]
-  BoardMenu -->|operações| Controller
+subgraph Interface [🖥️ Interface do Usuário]
+    A[👤 Usuário] --> B[🧭 MainMenu / BoardMenu]
+end
 
-  Controller -->|usa serviços| Service
-  Service -->|acessa dados| DAO
-  DAO -->|persiste| Entity
-  Service --> DTO
-  DTO -->|leva dados| UI
+subgraph Controller
+    B --> C[🎮 BoardController]
+end
 
-  subgraph "Entities"
-    Entity1[BoardEntity]
-    Entity2[BoardColumnEntity]
-    Entity3[CardEntity]
-    Entity4[BlockEntity]
-  end
+subgraph Service
+    C --> D1[📦 BoardService]
+    C --> D2[📦 CardService]
+    C --> D3[🔍 BoardQueryService]
+    C --> D4[🔍 CardQueryService]
+    C --> D5[🔍 BoardColumnQueryService]
+end
 
-  subgraph "Services"
-    Service1[BoardService]
-    Service2[CardService]
-    Service3[BoardQueryService]
-    Service4[CardQueryService]
-    Service5[BoardColumnQueryService]
-  end
+subgraph DAO
+    D1 --> E1[💾 BoardDAO]
+    D1 --> E2[💾 BoardColumnDAO]
+    D2 --> E3[💾 CardDAO]
+    D2 --> E4[💾 BlockDAO]
+end
 
-  subgraph "DAOs"
-    DAO1[BoardDAO]
-    DAO2[BoardColumnDAO]
-    DAO3[CardDAO]
-    DAO4[BlockDAO]
-  end
+subgraph Entity
+    E1 --> F1[🧱 BoardEntity]
+    E2 --> F2[🧱 BoardColumnEntity]
+    E3 --> F3[🧱 CardEntity]
+    E4 --> F4[🧱 BlockEntity]
+end
 
-  subgraph "Exceções"
-    E1[CardBlockedException]
-    E2[CardFinishedException]
-    E3[EntityNotFoundException]
-  end
+subgraph DTO
+    D1 --> G1[📤 BoardDetailsDTO]
+    D1 --> G2[📤 BoardColumnDTO]
+    D2 --> G3[📤 CardDetailsDTO]
+end
 
-  subgraph "DTOs"
-    DTO1[BoardDetailsDTO]
-    DTO2[BoardColumnDTO]
-    DTO3[BoardColumnInfoDTO]
-    DTO4[CardDetailsDTO]
-  end
+subgraph Exceptions
+    D2 --> H1[🚫 CardBlockedException]
+    D2 --> H2[🚫 CardFinishedException]
+    D1 --> H3[🚫 EntityNotFoundException]
+end
 
-  subgraph "Outros"
-    O1[MigrationStrategy]
-    O2[ConnectionConfig]
-    O3[OffsetDateTimeConverter]
-  end
+subgraph Outros
+    I1[⚙️ MigrationStrategy]
+    I2[🔌 ConnectionConfig]
+    I3[🕒 OffsetDateTimeConverter]
+end
 
-  Controller --> Service
-  Service --> DAO
-  DAO --> Entity
-  Service --> DTO
-  UI --> Controller
 ```
 
 ---
